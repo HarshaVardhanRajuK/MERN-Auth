@@ -1,0 +1,12 @@
+.glass {
+    background: transparent;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px #4747470b;
+    backdrop-filter:  blur( 2.1px);
+    border:  1px solid rgba(255, 255, 255, 0.3);
+    @apply p-5 border-2 border-gray-400 w-[350px] flex flex-col justify-center items-center gap-3
+}
+
+.inputField {
+    @apply p-1 rounded text-black outline-lime-600 border-none w-full bg-white flex items-center pr-3
+}
