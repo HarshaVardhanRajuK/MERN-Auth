@@ -95,6 +95,9 @@ const Login = () => {
 
       const data = await response.json();
 
+      console.log(response)
+      console.log(response.cookies)
+
       if(!response.ok) {
         setPostDataStatus({
           done: true,
