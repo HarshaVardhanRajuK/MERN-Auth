@@ -11,6 +11,7 @@ const ResetPassword = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
   let { userId } = useParams();
@@ -31,6 +32,7 @@ const ResetPassword = () => {
   });
 
   async function postData() {
+
     try {
       let options = {
         method: "PUT",
@@ -45,6 +47,7 @@ const ResetPassword = () => {
         options
       );
       const data = await response.json();
+      setLoading(false)
 
       if (response.ok) {
         alert("Password reset successfully");
@@ -63,9 +66,8 @@ const ResetPassword = () => {
     }
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
+  function handleInputs() {
+    
     const newErrors = { ...errors };
 
     const passwordRegex =
@@ -91,8 +93,25 @@ const ResetPassword = () => {
       newErrors.confirmPassword.message = "";
     }
 
+    let result = true;
+
+    Object.keys(newErrors).forEach((key) => {
+      if (newErrors[key].state) {
+        result = false;
+      }
+    });
+
     setErrors(newErrors);
 
+    return result;
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!handleInputs()){
+      return;
+    }
+    setLoading(true)
     postData();
   }
 
@@ -175,10 +194,10 @@ const ResetPassword = () => {
             </p>
           </div>
 
-          <input
+          {!loading ? (<input
             type="submit"
             className="w-full bg-blue-500 py-1 rounded-md cursor-pointer"
-          />
+          />) : (<div className="flex justify-center items-center"><span className={styles.spinner}></span></div>)}
         </form>
 
         {errors.submitError.state && <div className="text-red-500 text-xs">

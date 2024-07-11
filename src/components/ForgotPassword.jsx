@@ -23,6 +23,11 @@ const ForgotPassword = () => {
       message: "",
     },
   });
+
+  const [loading, setLoading] = useState({
+    sendOtp: false,
+    submitOtp: false
+  })
   
   const navigate = useNavigate();
 
@@ -48,12 +53,13 @@ const ForgotPassword = () => {
       let url = import.meta.env.VITE_URL
 
       let response = await fetch(`${url}/getotp`, options);
-
-      console.log(response);
-
+      
       let data = await response.json();
-
-      console.log(data);
+      
+      setLoading(prev => ({
+        ...prev,
+        sendOtp: false
+      }))
 
       if (response.ok) {
         setIsValid(true);
@@ -117,12 +123,21 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     if(validateEmail() ){
+      setLoading(prev => ({
+        ...prev,
+        sendOtp: true
+      }))
       getotp();
     }
   }
 
   async function otpSubmitHandler(e) {
     e.preventDefault();
+
+    setLoading(prev => ({
+      ...prev,
+      submitOtp: true
+    }))
 
     try {
       if (otp.value.length !== 4) {
@@ -158,6 +173,11 @@ const ForgotPassword = () => {
       let response = await fetch(`${url}/verifyotp`, options);
 
       let data = await response.json();
+
+      setLoading(prev => ({
+        ...prev,
+        submitOtp: false
+      }))
 
       if (response.ok) {
         navigate(`/reset-password/${data.userId}`);
@@ -216,12 +236,13 @@ const ForgotPassword = () => {
               {userData.error.message}
             </p>
           </div>
-
-          <input
+{!loading.sendOtp ? 
+          (<input
             type="submit"
             value="Send OTP"
             className="w-full bg-blue-500 py-1 rounded-md cursor-pointer"
-          />
+          />) : (<div className="flex justify-center items-center"><span className={styles.spinner}></span></div>)
+}
         </form>
         {/* otp */}
         {
@@ -236,6 +257,7 @@ const ForgotPassword = () => {
 
               <div className={styles.inputField}>
                 <input
+                
                   onChange={(e) => {
 
                     setOtp((prev) => {
@@ -252,16 +274,16 @@ const ForgotPassword = () => {
                   }}
                   name="otp"
                   id="otp"
-                  className="outline-none flex-1"
+                  className="outline-none flex-1 text-center"
                   type="number"
                   value={otp.value}
                 />
               </div>
             </div>
-            <input
+            {!loading.submitOtp ? (<input
               type="submit"
               className="w-full bg-blue-500 py-1 rounded-md cursor-pointer"
-            />
+            />) : (<div className="flex justify-center items-center"><span className={styles.spinner}></span></div>)}
             {userData.otpSent.state && (
               <p className="text-green-500">{userData.otpSent.message}</p>
             )}

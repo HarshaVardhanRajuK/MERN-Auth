@@ -10,3 +10,16 @@
 .inputField {
     @apply p-1 rounded text-black outline-lime-600 border-none w-full bg-white flex items-center pr-3
 }
+
+.spinner {
+    width: 33px;
+    height: 33px;
+    border: 5px solid rgb(66, 66, 187);
+    border-bottom: 5px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

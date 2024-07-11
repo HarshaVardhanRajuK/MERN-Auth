@@ -28,6 +28,7 @@ const Login = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false)
 
 
   const navigate = useNavigate()
@@ -95,8 +96,7 @@ const Login = () => {
 
       const data = await response.json();
 
-      console.log(response)
-      console.log(response.cookies)
+      setLoading(false)
 
       if(!response.ok) {
         setPostDataStatus({
@@ -121,6 +121,7 @@ const Login = () => {
     e.preventDefault();
 
     if(formValidation()) {
+      setLoading(true)
       postData()
     }
   }
@@ -203,11 +204,13 @@ const Login = () => {
             </p>
           </div>
 
+{!loading ? (
           <input
             type="submit"
             className="w-full bg-blue-500 py-1 rounded-md cursor-pointer"
-            value="Login"
-          />
+            value= "Login"
+          />) : (<div className="flex justify-center items-center"><span className={styles.spinner}></span></div>)
+}
 
           <Link className="text-xs text-blue-500 underline underline-offset-2 cursor-pointer" to="/forgot-password">Forgot Password</Link>
         </form>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../styles/Register.module.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye, FaUser } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 
@@ -32,6 +32,9 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
 
   const [postDataStatus, setPostDataStatus] = useState({
     done: false,
@@ -128,13 +131,13 @@ const Register = () => {
 
       const data = await response.json();
 
+      setLoading(false)
+
       setPostDataStatus({
         done: true,
         status: response.ok,
         message: data.message,
       });
-
-      Navigate("/login")
 
     } catch (err) {
       console.log(err);
@@ -145,6 +148,7 @@ const Register = () => {
     e.preventDefault();
 
     if (formValidation()) {
+      setLoading(true)
       postData();
     }
   }
@@ -272,12 +276,12 @@ const Register = () => {
               {errors.confirmPassword.message}
             </p>
           </div>
-
-          <input
+{!loading ? (<input
             type="submit"
             className="w-full bg-blue-500 py-1 rounded-md cursor-pointer"
             value="Register"
-          />
+          />) :(<div className="flex justify-center items-center"><span className={styles.spinner}></span></div>)}
+          
         </form>
 {postDataStatus.done && <h3 className={postDataStatus.status ? "text-green-500" : "text-red-500"}>{postDataStatus.message}</h3> }
 
