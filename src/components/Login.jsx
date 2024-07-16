@@ -107,10 +107,8 @@ const Login = () => {
       }
 
       if (response.ok) {
-        navigate("/my-profile")
+          navigate("/my-profile")
       }
-      
-
 
     } catch (err) {
       console.log(err);

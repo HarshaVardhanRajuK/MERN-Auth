@@ -30,7 +30,7 @@ const MyProfile = () => {
   async function handleLogout() {
     try {
       const options = {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

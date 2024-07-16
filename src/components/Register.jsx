@@ -130,6 +130,7 @@ const Register = () => {
       );
 
       const data = await response.json();
+      console.log(response, data)
 
       setLoading(false)
 
@@ -138,9 +139,19 @@ const Register = () => {
         status: response.ok,
         message: data.message,
       });
+      if (response.ok){
+        setTimeout(() => {
+          navigate("/login")
+        }, 1000);
+      }
 
     } catch (err) {
       console.log(err);
+      setPostDataStatus({
+        done: true,
+        status: false,
+        message: "something went wrong! try again.",
+      });
     }
   }
 
